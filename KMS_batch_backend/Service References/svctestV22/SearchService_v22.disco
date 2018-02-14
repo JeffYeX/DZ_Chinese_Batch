@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="https://svctest.datazoo.co.nz/SearchService_v22.asmx?wsdl" docRef="https://svctest.datazoo.co.nz/SearchService_v22.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="https://svctest.datazoo.co.nz/SearchService_v22.asmx" xmlns:q1="http://svc.datazoo.co.nz" binding="q1:SearchService_v22Soap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="https://svctest.datazoo.co.nz/SearchService_v22.asmx" xmlns:q2="http://svc.datazoo.co.nz" binding="q2:SearchService_v22Soap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

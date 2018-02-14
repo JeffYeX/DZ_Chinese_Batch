@@ -37,3 +37,4 @@ C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\ICSharpCo
 C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\ClosedXML.pdb
 C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\Excel.pdb
 C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\obj\Debug\KMS_batch_backend.csprojResolveAssemblyReference.cache
+C:\Users\JeffYe\Documents\DZ_Chinese_Batch\KMS_batch_backend\bin\Debug\ColorConsole.dll
