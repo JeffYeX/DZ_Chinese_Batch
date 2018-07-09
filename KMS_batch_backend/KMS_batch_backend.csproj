@@ -81,6 +81,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\svcV26\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -126,6 +131,37 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\svctestV22\SearchService_v22.wsdl" />
+    <None Include="Service References\svcV26\KMS_batch_backend.svcV26.AuthenticateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\svcV26\KMS_batch_backend.svcV26.CodeListItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\svcV26\KMS_batch_backend.svcV26.GetCodeListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\svcV26\KMS_batch_backend.svcV26.GetVerifyReportResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\svcV26\KMS_batch_backend.svcV26.LogOutResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\svcV26\KMS_batch_backend.svcV26.SessionManager_v26.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\svcV26\KMS_batch_backend.svcV26.VerifyHistoryItem_v26.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\svcV26\KMS_batch_backend.svcV26.VerifyHistoryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\svcV26\KMS_batch_backend.svcV26.VerifyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\svcV26\KMS_batch_backend.svcV26.VerifyResults_v26.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\svcV26\SearchService_v26.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -133,6 +169,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\KmsServices\" />
     <WCFMetadataStorage Include="Service References\svctestV22\" />
+    <WCFMetadataStorage Include="Service References\svcV26\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\KmsServices\configuration91.svcinfo" />
@@ -160,6 +197,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\svctestV22\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\svcV26\SearchService_v26.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\svcV26\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\svcV26\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\svcV26\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

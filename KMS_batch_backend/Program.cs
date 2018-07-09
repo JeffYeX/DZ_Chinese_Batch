@@ -7,6 +7,7 @@ using ClosedXML.Excel;
 using Excel;
 using KMS_batch_backend.KmsServices;
 using KMS_batch_backend.svctestV22;
+using KMS_batch_backend.svcV26;
 using ColorConsole;
 
 namespace KMS_batch_backend
@@ -35,15 +36,15 @@ namespace KMS_batch_backend
             var outputList = new List<OutputBindingModel>();
             var outputListAustralia = new List<OutputBindingModelAustralia>();
 
-            var testClient = new SearchService_v22SoapClient();
-            /*var client = new SearchService_v18SoapClient();*/
+            //var testClient = new SearchService_v22SoapClient();
+            var testClient = new SearchService_v26SoapClient();
 
-            var testToken = testClient.Authenticate("tony_dz", "test#123");
+            var testToken = testClient.Authenticate("tony_dz", "asd");
             /*var token = client.Authenticate("Username", "Password");*/
 
             testToken.DataSources =
                 testToken.DataSources.Where(
-                    v22 => v22.DataSourceName == "Australian Marketing").ToArray();
+                    v26 => v26.DataSourceName == "Australian Residential").ToArray();
             testToken.DataSources[0].Enabled = true;
             /*token.DataSources =
                 token.DataSources.Where(
@@ -52,7 +53,7 @@ namespace KMS_batch_backend
 
             while (greenAndOrangeSwitch < 2)
             {
-                var filePath = Directory.GetCurrentDirectory() + "\\Input.xlsx";
+                var filePath = Directory.GetCurrentDirectory() + "\\DZ_AU_POC_file20180702_IQ_v1 - Copy.xlsx";
                 var stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
                 var excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
                 var recordCount = 0;
@@ -77,20 +78,21 @@ namespace KMS_batch_backend
                     outputList.Add(ChinaDataProcessing(input, token));
                     recordCount++;
                 }*/
-                    if (testToken.DataSources[0].DataSourceName.Equals("Australian Marketing"))
+                    if (testToken.DataSources[0].DataSourceName.Equals("Australian Residential"))
                     {
                         if (greenAndOrangeSwitch == 0)
                         {
-                            input.FirstName = excelReader[2].ToString();
-                            input.MiddleName = excelReader[3]?.ToString() ?? "";
-                            input.LastName = excelReader[4].ToString();
-                            input.UnitNumber = excelReader[15]?.ToString() ?? "";
-                            input.StreetNumber = excelReader[16]?.ToString() ?? "";
-                            input.StreetName = excelReader[17]?.ToString() ?? "";
-                            input.Suburb = excelReader[6].ToString();
-                            input.PostCode = excelReader[8].ToString();
-                            outputListAustralia.Add(AustraliaDataProcessing(input, testToken, "Green"));
-                            console.WriteLine(input + " is done", ConsoleColor.Green);
+                            input.FirstName = excelReader[1].ToString();
+                            //input.MiddleName = excelReader[3]?.ToString() ?? "";
+                            input.LastName = excelReader[2].ToString();
+                            input.DateOfBirth = DateTime.ParseExact(excelReader[3] + "-" + excelReader[4] + "-" + excelReader[5], "yyyy-M-d", CultureInfo.InvariantCulture);
+                            input.UnitNumber = excelReader[26]?.ToString() ?? "";
+                            input.StreetNumber = excelReader[32]?.ToString() ?? "";
+                            input.StreetName = excelReader[48]?.ToString() ?? "";
+                            input.Suburb = excelReader[51]?.ToString() ?? "";
+                            input.PostCode = excelReader[10].ToString();
+                            outputListAustralia.Add(AustraliaDataProcessing(input, testToken, ""));
+                            console.WriteLine(input.FirstName + " is done", ConsoleColor.Green);
                             recordCount++;
                         }
                         else
@@ -120,30 +122,33 @@ namespace KMS_batch_backend
                     }
                 }
                 excelReader.Close();
-                greenAndOrangeSwitch++;
+                //greenAndOrangeSwitch++;
+                greenAndOrangeSwitch = 3;
             }
             //Console.WriteLine($"In total, {recordCount} are being processed.");
             //BuildingOutput(outputList);
 
             var ausOutputBuild = new BuildingOutputAustralia();
             ausOutputBuild.BuildingOutput(outputListAustralia);
-
+            Console.WriteLine("Press enter to exit");
+            Console.ReadLine();
             //excelReader.Close();
         }
 
-        private static OutputBindingModelAustralia AustraliaDataProcessing(InputBindingModel input, SessionManager_v22 token,
+        private static OutputBindingModelAustralia AustraliaDataProcessing(InputBindingModel input, SessionManager_v26 token,
             string color)
         {
             var output = new OutputBindingModelAustralia();
-            var result = new VerifyResults_v22();
+            var result = new VerifyResults_v26();
 
-            using (var client = new SearchService_v22SoapClient())
+            using (var client = new SearchService_v26SoapClient())
             {
-                var content = new SearchCriteria_v22
+                var content = new SearchCriteria_v26
                 {
                     FirstName = input.FirstName,
                     MiddleName = input.MiddleName,
                     LastName = input.LastName,
+                    DateOfBirth = input.DateOfBirth,
                     UnitNumber = input.UnitNumber,
                     StreetNumber = input.StreetNumber,
                     StreetName = input.StreetName,
