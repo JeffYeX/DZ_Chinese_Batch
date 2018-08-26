@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
 using Excel;
-using KMS_batch_backend.KmsServices;
+using KMS_batch_backend.V27Production;
 
 namespace KMS_batch_backend
 {
@@ -35,13 +35,13 @@ namespace KMS_batch_backend
             var input = new InputBindingModel();
             var outputList = new List<OutputBindingModel>();
 
-            var client = new SearchService_v18SoapClient();
+            var client = new SearchService_v27SoapClient();
 
             var token = client.Authenticate("1234", "1234");
             
             token.DataSources =
                 token.DataSources.Where(
-                    v18 => v18.DataSourceName == "China National ID" || v18.DataSourceName == "Watchlist AML").ToArray();
+                    v27 => v27.DataSourceName == "China National ID" || v27.DataSourceName == "Watchlist AML").ToArray();
 
             var recordCount = 0;
             while (excelReader.Read())
@@ -68,14 +68,14 @@ namespace KMS_batch_backend
             excelReader.Close();
         }
 
-        private static OutputBindingModel DataProcessing(InputBindingModel input, SessionManager_v18 token)
+        private static OutputBindingModel DataProcessing(InputBindingModel input, SessionManager_v27 token)
         {
             var output = new OutputBindingModel();
-            var result = new VerifyResults_v18();
+            var result = new VerifyResults_v27();
 
-            using (var client = new SearchService_v18SoapClient())
+            using (var client = new SearchService_v27SoapClient())
             {
-                var content = new SearchCriteria_v18
+                var content = new SearchCriteria_v27
                 {
                     FullName = input.FullName,
                     IDCardNo = input.IdCardnumber,
