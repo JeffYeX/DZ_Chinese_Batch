@@ -37,7 +37,7 @@ namespace KMS_batch_backend
 
             var client = new SearchService_v27SoapClient();
 
-            var token = client.Authenticate("1234", "1234");
+            var token = client.Authenticate("tony_dz", "Jacob#94");
             
             token.DataSources =
                 token.DataSources.Where(
@@ -51,21 +51,33 @@ namespace KMS_batch_backend
                     recordCount++;
                     continue;
                 }
-                input.DZID = recordCount.ToString();
+
+                if (recordCount % 10 == 0)
+                {
+                    token = client.Authenticate("tony_dz", "Jacob#94");
+
+                    token.DataSources =
+                        token.DataSources.Where(
+                            v27 => v27.DataSourceName == "China National ID" || v27.DataSourceName == "Watchlist AML").ToArray();
+                }
+
+                input.DZID = "1";
                 input.CustomerReference = excelReader[1].ToString();
-                input.ShowPhoto = excelReader[2].Equals("TRUE");
-                input.FullName = excelReader[3].ToString();
-                input.IdCardnumber = excelReader[4].ToString();
-                input.DateOfBirth = DateTime.ParseExact(excelReader[5].ToString(),
-                    "d/M/yyyy hh:mm:ss tt",
+                input.ShowPhoto = excelReader[2].Equals("FALSE");
+                input.FullName = excelReader[3].ToString() + excelReader[2].ToString();
+                input.IdCardnumber = excelReader[5].ToString();
+                input.DateOfBirth = DateTime.ParseExact(excelReader[4].ToString(),
+                    "d/MM/yyyy h:mm:ss tt",
                     null);
                 outputList.Add(DataProcessing(input, token));
+                Console.WriteLine("**" + recordCount + "** " + token.Token);
                 recordCount++;
             }
             Console.WriteLine($"In total, {recordCount} are being processed.");
             BuildingOutput(outputList);
 
             excelReader.Close();
+            Console.ReadLine();
         }
 
         private static OutputBindingModel DataProcessing(InputBindingModel input, SessionManager_v27 token)
@@ -85,7 +97,7 @@ namespace KMS_batch_backend
 
                 if (IdValidCheck(content.IDCardNo))
                 {
-                    result = client.Verify(token, content);
+                result = client.Verify(token, content);
                 }
                 if (result.Message != null && result.Message.Equals("Success"))
                 {
@@ -125,8 +137,25 @@ namespace KMS_batch_backend
                 {
                     output.Message = "Fail";
                     output.ErrorMessages = "ID number is not valid";
+                    if (result.Results[0].Item == null)
+                    {
+                        output.DZID = input.DZID;
+                        output.CustomerReference = input.CustomerReference;
+                        output.WatchListPdf = "None";
+                        output.WatchListCategory = "None";
+                        output.ScanId = "None";
+
+                    }
+                    else
+                    {
+                        output.DZID = input.DZID;
+                        output.CustomerReference = input.CustomerReference;
+                        output.WatchListPdf = result.Results[0].url_more;
+                        output.WatchListCategory = result.Results[0].Item[0].WatchlistCategory;
+                        output.ScanId = result.Results[0].scan_id;
+                    }
                 }
-                Console.WriteLine($"{output.Message} {content.IDCardNo} {output.ErrorMessages}");
+                Console.WriteLine($"{output.Message} {content.IDCardNo} {output.ErrorMessages} ");
             }
             return output;
         }

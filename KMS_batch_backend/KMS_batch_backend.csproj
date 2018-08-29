@@ -70,6 +70,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\V27Production\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -90,12 +95,44 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\KmsServices\SearchService_v181.wsdl" />
+    <None Include="Service References\V27Production\KMS_batch_backend.V27Production.AuthenticateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\V27Production\KMS_batch_backend.V27Production.CodeListItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\V27Production\KMS_batch_backend.V27Production.GetCodeListResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\V27Production\KMS_batch_backend.V27Production.GetVerifyReportResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\V27Production\KMS_batch_backend.V27Production.LogOutResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\V27Production\KMS_batch_backend.V27Production.SessionManager_v27.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\V27Production\KMS_batch_backend.V27Production.VerifyHistoryItem_v27.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\V27Production\KMS_batch_backend.V27Production.VerifyHistoryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\V27Production\KMS_batch_backend.V27Production.VerifyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\V27Production\KMS_batch_backend.V27Production.VerifyResults_v27.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\V27Production\SearchService_v27.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\KmsServices\" />
+    <WCFMetadataStorage Include="Service References\V27Production\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\KmsServices\configuration91.svcinfo" />
@@ -111,6 +148,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\KmsServices\SearchService_v181.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\V27Production\SearchService_v27.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\V27Production\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\V27Production\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\V27Production\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
