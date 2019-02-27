@@ -26,6 +26,8 @@ C:\Users\JeffYe\Documents\Visual Studio 2015\Projects\KMS_batch_backend(add ID v
 C:\Users\JeffYe\Documents\Visual Studio 2015\Projects\KMS_batch_backend(add ID verification and output)\KMS_batch_backend\KMS_batch_backend\obj\Debug\KMS_batch_backend.exe
 C:\Users\JeffYe\Documents\Visual Studio 2015\Projects\KMS_batch_backend(add ID verification and output)\KMS_batch_backend\KMS_batch_backend\obj\Debug\KMS_batch_backend.pdb
 C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\KMS_batch_backend.exe.config
+C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\obj\Debug\KMS_batch_backend.exe
+C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\obj\Debug\KMS_batch_backend.pdb
 C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\KMS_batch_backend.exe
 C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\KMS_batch_backend.pdb
 C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\ClosedXML.dll
@@ -34,5 +36,7 @@ C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\Excel.dll
 C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\ICSharpCode.SharpZipLib.dll
 C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\ClosedXML.pdb
 C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\Excel.pdb
-C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\obj\Debug\KMS_batch_backend.exe
-C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\obj\Debug\KMS_batch_backend.pdb
+C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\obj\Debug\KMS_batch_backend.csprojResolveAssemblyReference.cache
+C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\Newtonsoft.Json.dll
+C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\JeffYe\Documents\DZ_Chinese_batch\KMS_batch_backend\bin\Debug\Newtonsoft.Json.xml

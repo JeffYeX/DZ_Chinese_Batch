@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.ServiceModel;
+using System.Xml;
+using System.Xml.Serialization;
 using ClosedXML.Excel;
 using Excel;
-using KMS_batch_backend.KmsServices;
+//using KMS_batch_backend.V27Production;
+using KMS_batch_backend.V27Production;
+using Newtonsoft.Json;
 
 namespace KMS_batch_backend
 {
     public static class Program
     {
-        //private static readonly Dictionary<string, string> IdAddressLocalityDictionary = LoadAddressTable();
-
-        private static readonly CultureInfo ChineseCultureInfo = new CultureInfo("zh-CN");
-
         private static readonly Dictionary<int, string> RemainderDictionary = new Dictionary<int, string>
         {
             {0, "1"},
@@ -32,21 +33,25 @@ namespace KMS_batch_backend
 
         private static void Main(string[] args)
         {
-            var filePath = Directory.GetCurrentDirectory() + "\\Input.xlsx";
+            
+            var filePath = Directory.GetCurrentDirectory() + "\\InputGB.xlsx";
             var stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
             var excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
 
             var input = new InputBindingModel();
             var outputList = new List<OutputBindingModel>();
 
-            var client = new SearchService_v18SoapClient();
+            var client = new SearchService_v27SoapClient();
 
-            var token = client.Authenticate("123", "1234");
-            
+            //var token = client.Authenticate("Service Test", "f2MEwR=tra");
+            var token = client.Authenticate("Service Test", "f2MEwR=tra");
+
             token.DataSources =
                 token.DataSources.Where(
-                    v18 => v18.DataSourceName == "China National ID").ToArray();
+                    //v27 => v27.DataSourceName == "Yellow Pages" || v27.DataSourceName == "NZTA Drivers License" || v27.DataSourceName == "DZ NAD").ToArray();
+                    v27 => v27.DataSourceName == "DZ NAD").ToArray();
 
+            token.DataSources[0].ConsentObtained = true;
             var recordCount = 0;
             while (excelReader.Read())
             {
@@ -55,76 +60,82 @@ namespace KMS_batch_backend
                     recordCount++;
                     continue;
                 }
-                input.DZID = recordCount.ToString();
-                input.CustomerReference = excelReader[1].ToString();
-                input.ShowPhoto = excelReader[2].Equals("FALSE");
-                input.FullName = excelReader[3].ToString();
-                input.IdCardnumber = excelReader[4].ToString();
-                var blah = excelReader[5].ToString();
-                input.DateOfBirth = DateTime.ParseExact(excelReader[5].ToString(),
-                    "d/MM/yyyy hh:mm:ss tt",
+
+                token = client.Authenticate("Service Test", "f2MEwR=tra");
+
+                    token.DataSources =
+                        token.DataSources.Where(
+                            //v27 => v27.DataSourceName == "Yellow Pages" || v27.DataSourceName == "NZTA Drivers License" || v27.DataSourceName == "DZ NAD").ToArray();
+                            v27 => v27.DataSourceName == "DZ NAD").ToArray();
+
+                token.DataSources[0].ConsentObtained = true;
+                input.DZID = "1";
+                //input.CustomerReference = excelReader[1].ToString();
+                /*input.ShowPhoto = excelReader[2].Equals("FALSE");
+                input.FullName = excelReader[3].ToString() + excelReader[2].ToString();
+                input.IdCardnumber = excelReader[5].ToString();
+                input.DateOfBirth = DateTime.ParseExact(excelReader[4].ToString(),
+                    "d/MM/yyyy h:mm:ss tt",
+                    null);*/
+
+                
+                input.FirstName = excelReader[1].ToString() ?? "";
+                input.MiddleName = excelReader[2].ToString() ?? "";
+                input.LastName = excelReader[3].ToString() ?? "";
+                input.StreetNumber = excelReader[4].ToString() ?? "";
+                input.StreetName = excelReader[5].ToString() ?? "";
+                input.City = excelReader[6].ToString() ;
+                input.PostCode = excelReader[8].ToString() ?? "";
+                var blah = excelReader[9].ToString() ?? "";
+                input.DateOfBirth = DateTime.ParseExact(excelReader[9].ToString(),
+                    "d-M-yyyy",
                     null);
-                outputList.Add(DataProcessing(input, token));
+                input.DLNumber = excelReader[10].ToString() ?? "";
+                input.DLVersion = excelReader[11].ToString() ?? "";
+
+                var output = DataProcessing(input, token);
+
+                outputList.Add(output);
+                Console.WriteLine("**" + recordCount + "** " + token.Token + "**" + output.SourceVerfied);
                 recordCount++;
             }
             Console.WriteLine($"In total, {recordCount} are being processed.");
             BuildingOutput(outputList);
 
             excelReader.Close();
+            Console.ReadLine();
         }
 
-        private static OutputBindingModel DataProcessing(InputBindingModel input, SessionManager_v18 token)
+        private static OutputBindingModel DataProcessing(InputBindingModel input, SessionManager_v27 token)
         {
             var output = new OutputBindingModel();
+            var result = new VerifyResults_v27();
 
-            using (var client = new SearchService_v18SoapClient())
+            using (var client = new SearchService_v27SoapClient())
             {
-                var content = new SearchCriteria_v18
+                var content = new SearchCriteria_v27
                 {
-                    FullName = input.FullName,
-                    IDCardNo = input.IdCardnumber,
-                    DateOfBirth = input.DateOfBirth,
-                    ShowPhoto = input.ShowPhoto
+                    FirstName = input.FirstName,
+                    MiddleName = input.MiddleName,
+                    LastName = input.LastName,
+                    StreetNumber = input.StreetNumber,
+                    StreetName = input.StreetName,
+                    City = input.City,
+                    PostCode = input.PostCode,
+                    DriversLicenseNo = input.DLNumber,
+                    DriversLicenseVersion = input.DLVersion,
+                    DateOfBirth = input.DateOfBirth
                 };
 
-                var idValadation = IdValidCheck(content.IDCardNo);
-
-                /*var addressLocality = " ";
-                if (idValadation)
+                /*if (IdValidCheck(content.IDCardNo))
                 {
-                    var idAddressSegment = content.IDCardNo.Substring(0, 6);
-                    if (!IdAddressLocalityDictionary.TryGetValue(idAddressSegment, out addressLocality))
-                    {
-                        addressLocality = " ";
-                    }
-                }
-
-                var dateOfBirthVerification = false;
-                if (idValadation)
-                {
-                    var idDobSegment = content.IDCardNo.Substring(6, 8);
-                    DateTime requestDobNative;
-                    if (DateTime.TryParseExact(idDobSegment, "yyyyMMdd", ChineseCultureInfo, DateTimeStyles.None,
-                        out requestDobNative))
-                    {
-                        dateOfBirthVerification = requestDobNative.Equals(content.DateOfBirth);
-                    }
-                }
-
-                var gender = " ";
-                if (idValadation)
-                {
-                    int idGenderSegment;
-                    if (int.TryParse(content.IDCardNo[16].ToString(), out idGenderSegment))
-                    {
-                        gender = idGenderSegment % 2 == 0
-                        ? "Female"
-                        : "Male";
-                    }
+                result = client.Verify(token, content);
                 }*/
 
-                var result = client.Verify(token, content);
+                result = client.Verify(token, content);
                 
+                //Console.WriteLine(json);
+
                 if (result.Message != null && result.Message.Equals("Success"))
                 {
                     output.Message = "Success";
@@ -132,36 +143,75 @@ namespace KMS_batch_backend
                     {
                         output.DZID = input.DZID;
                         output.CustomerReference = input.CustomerReference;
+                        output.WatchListPdf = "None";
+                        output.WatchListCategory = "None";
+                        output.ScanId = "None";
                     }
                     else
                     {
-                        output.DZID = input.DZID;
-                        output.CustomerReference = input.CustomerReference;
-                        var chinaIdResult = result.Results[0].Item[0];
-                        output.DZID = input.DZID;
-                        output.CustomerReference = input.CustomerReference;
-                        output.InputFullName = content.FullName;
-                        output.InputDOB = content.DateOfBirth.ToShortDateString();
-                        output.SourceVerfied = chinaIdResult.SourceVerified;
-                        output.IdCardNoValid = chinaIdResult.IDCardNoValid;
-                        output.DateOfBirthVerified = chinaIdResult.DateofBirthVerified;
-                        output.AddressLocality = chinaIdResult.Addresses[0].AddressLine1;
-                        output.Gender = chinaIdResult.Gender;
+                        var blah = result.Results[0].Item[0];
 
-                        /*output.IdCardNoValid = idValadation;
-                        output.DateOfBirthVerified = dateOfBirthVerification;
-                        output.AddressLocality = addressLocality;
-                        output.Gender = gender;*/
-                        //output.PhotoUrl = input.ShowPhoto ? chinaIdResult.PhotoURL : "Not requested";
-                        output.ErrorMessages = chinaIdResult.ErrorMessage;
+                        var json = JsonConvert.SerializeObject(blah);
+
+                        output.Message = result.Message;
+                        output.DZID = result.ReportingReference;
+                        output.CustomerReference = json;
+                        output.SourceVerfied = blah.SourceVerified;
+
+                        /*output.DZID = input.DZID;
+                        output.CustomerReference = input.CustomerReference;
+                        output.WatchListPdf = result.Results[0].url_more;
+                        output.WatchListCategory = result.Results[0].Item[0].WatchlistCategory;
+                        output.ScanId = result.Results[0].scan_id;*/
                     }
+
+
+                    /*if (result.Results[0].Item == null) return output;
+                    var chinaIdResult = result.Results[0].Item[0];
+                    var addressInfo = chinaIdResult.Addresses[0];
+                    output.DZID = result.ReportingReference;
+                    output.CustomerReference = input.CustomerReference;
+                    //output.InputFullName = content.FullName;
+                    //output.InputDOB = content.DateOfBirth.ToShortDateString();
+                    output.SourceVerfied = chinaIdResult.SourceVerified;
+                    /*output.IdCardNoValid = chinaIdResult.IDCardNoValid;
+                    output.DateOfBirthVerified = chinaIdResult.DateofBirthVerified;
+                    output.AddressLocality = chinaIdResult.Addresses[0].AddressLine1;
+                    output.Gender = chinaIdResult.Gender;
+                    output.PhotoUrl = input.ShowPhoto ? chinaIdResult.PhotoURL : "Not requested";#1#
+                    output.AddressLine1 = addressInfo.AddressLine1;
+                    output.DPID = addressInfo.DPID;
+                    output.SafeHarbour = result.Results[0].safe_harbour_score.ToString();
+                    output.Firstname = chinaIdResult.FirstName;
+                    output.LastName = chinaIdResult.LastName;
+                    //output.ErrorMessages = chinaIdResult.ErrorMessage;*/
+
+
+
                 }
                 else
                 {
                     output.Message = "Fail";
-                    output.ErrorMessages = "ID number is not valid";
+                    //output.ErrorMessages = "ID number is not valid";
+                    if (result.Results[0].Item == null)
+                    {
+                        output.DZID = input.DZID;
+                        output.CustomerReference = input.CustomerReference;
+                        output.WatchListPdf = "None";
+                        output.WatchListCategory = "None";
+                        output.ScanId = "None";
+
+                    }
+                    /*else
+                    {
+                        output.DZID = input.DZID;
+                        output.CustomerReference = input.CustomerReference;
+                        output.WatchListPdf = result.Results[0].url_more;
+                        output.WatchListCategory = result.Results[0].Item[0].WatchlistCategory;
+                        output.ScanId = result.Results[0].scan_id;
+                    }*/
                 }
-                Console.WriteLine($"{output.Message} {content.IDCardNo} {output.ErrorMessages}");
+                Console.WriteLine($"{output.Message} {content.IDCardNo} {output.ErrorMessages} ");
             }
             return output;
         }
@@ -183,14 +233,25 @@ namespace KMS_batch_backend
             worksheet.Cell($"A{rowIndicator}").Value = "Message";
             worksheet.Cell($"B{rowIndicator}").Value = "DZID";
             worksheet.Cell($"C{rowIndicator}").Value = "CustomerReference";
-            worksheet.Cell($"D{rowIndicator}").Value = "InputFullName";
+            worksheet.Cell($"D{rowIndicator}").Value = "FirstName";
+            worksheet.Cell($"E{rowIndicator}").Value = "LastName";
+            worksheet.Cell($"F{rowIndicator}").Value = "AddressLine";
+            worksheet.Cell($"G{rowIndicator}").Value = "DPID";
+            worksheet.Cell($"H{rowIndicator}").Value = "Safeharbour";
+            worksheet.Cell($"I{rowIndicator}").Value = "SourceVerified";
+
+            /*worksheet.Cell($"D{rowIndicator}").Value = "InputFullName";
             worksheet.Cell($"E{rowIndicator}").Value = "InputDOB";
             worksheet.Cell($"F{rowIndicator}").Value = "SourceVerified";
             worksheet.Cell($"G{rowIndicator}").Value = "IDCardNoValid";
             worksheet.Cell($"H{rowIndicator}").Value = "DateOfBirthVerified";
             worksheet.Cell($"I{rowIndicator}").Value = "AddressLocality";
             worksheet.Cell($"J{rowIndicator}").Value = "Gender";
-            worksheet.Cell($"K{rowIndicator}").Value = "ErrorMessages";
+            worksheet.Cell($"K{rowIndicator}").Value = "PhotoURL";
+            worksheet.Cell($"L{rowIndicator}").Value = "WatchListPDF";
+            worksheet.Cell($"M{rowIndicator}").Value = "WatchListCategory";
+            worksheet.Cell($"N{rowIndicator}").Value = "ScanID";
+            worksheet.Cell($"O{rowIndicator}").Value = "ErrorMessages";*/
         }
 
         private static void BuildingOutputBody(IXLWorksheet worksheet, IEnumerable<OutputBindingModel> output)
@@ -201,14 +262,25 @@ namespace KMS_batch_backend
                 worksheet.Cell($"A{rowIndicator}").Value = item.Message;
                 worksheet.Cell($"B{rowIndicator}").Value = item.DZID;
                 worksheet.Cell($"C{rowIndicator}").Value = item.CustomerReference;
-                worksheet.Cell($"D{rowIndicator}").Value = item.InputFullName;
+                worksheet.Cell($"D{rowIndicator}").Value = item.Firstname;
+                worksheet.Cell($"E{rowIndicator}").Value = item.LastName;
+                worksheet.Cell($"F{rowIndicator}").Value = item.AddressLine1;
+                worksheet.Cell($"G{rowIndicator}").Value = item.DPID;
+                worksheet.Cell($"H{rowIndicator}").Value = item.SafeHarbour;
+                worksheet.Cell($"I{rowIndicator}").Value = item.SourceVerfied;
+
+                /*worksheet.Cell($"D{rowIndicator}").Value = item.InputFullName;
                 worksheet.Cell($"E{rowIndicator}").Value = item.InputDOB;
                 worksheet.Cell($"F{rowIndicator}").Value = item.SourceVerfied;
                 worksheet.Cell($"G{rowIndicator}").Value = item.IdCardNoValid;
                 worksheet.Cell($"H{rowIndicator}").Value = item.DateOfBirthVerified;
                 worksheet.Cell($"I{rowIndicator}").Value = item.AddressLocality;
                 worksheet.Cell($"J{rowIndicator}").Value = item.Gender;
-                worksheet.Cell($"K{rowIndicator}").Value = item.ErrorMessages;
+                worksheet.Cell($"K{rowIndicator}").Value = item.PhotoUrl;
+                worksheet.Cell($"L{rowIndicator}").Value = item.WatchListPdf;
+                worksheet.Cell($"M{rowIndicator}").Value = item.WatchListCategory;
+                worksheet.Cell($"N{rowIndicator}").Value = item.ScanId;
+                worksheet.Cell($"O{rowIndicator}").Value = item.ErrorMessages;*/
                 rowIndicator++;
             }
         }
@@ -240,31 +312,6 @@ namespace KMS_batch_backend
                    long.Parse(id.Substring(10, 2)) <= 12 && long.Parse(id.Substring(10, 2)) > 0 &&
                    long.Parse(id.Substring(12, 2)) <= 31 && long.Parse(id.Substring(12, 2)) > 0 &&
                    id[id.Length - 1].ToString().Equals(lastDigit);
-        }
-
-        private static Dictionary<string, string> LoadAddressTable()
-        {
-            //var typeInAssembly = typeof(LiloSoftMessageConsumer);
-            //var assembly = typeInAssembly.Assembly;
-
-            var filePath = Directory.GetCurrentDirectory() + "\\AddressTable.txt";
-
-            var stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
-
-            var addressDictionary = new Dictionary<string, string>();
-            //var stream = assembly.LoadEmbeddedResource("AddressTable.txt", "Resources.ChineseAddresses");
-            
-            using (var reader = new StreamReader(stream))
-            {
-                string contents;
-                while ((contents = reader.ReadLine()) != null)
-                {
-                    var spaceIndex = contents.IndexOf(" ", StringComparison.Ordinal);
-                    addressDictionary.Add(contents.Substring(0, spaceIndex), contents.Substring(spaceIndex + 1));
-                }
-            }
-
-            return addressDictionary;
         }
     }
 }
