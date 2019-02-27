@@ -30,6 +30,17 @@
 
         public string ScanId { get; set; }
 
+        public string SafeHarbour { get; set; }
+
+        public string AddressLine1 { get; set; }
+
+        public string DPID { get; set; }
+
         public string ErrorMessages { get; set; }
+
+        public string Firstname { get; set; }
+
+        public string LastName { get; set; }
+
     }
 }

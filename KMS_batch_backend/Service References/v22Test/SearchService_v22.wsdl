@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://svc.datazoo.co.nz" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://svc.datazoo.co.nz" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://svc.datazoo.co.nz">
+      <s:element name="Authenticate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserPassword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AuthenticateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AuthenticateResult" type="tns:SessionManager_v22" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SessionManager_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Token" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Reference" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DataSources" type="tns:ArrayOfDataSource_v22" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDataSource_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DataSource_v22" nillable="true" type="tns:DataSource_v22" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DataSource_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="DataSourceName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Enabled" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="ConsentObtained" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="LogOut">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Session" type="tns:SessionManager_v22" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LogOutResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="Verify">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Session" type="tns:SessionManager_v22" />
+            <s:element minOccurs="0" maxOccurs="1" name="Criteria" type="tns:SearchCriteria_v22" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SearchCriteria_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MiddleName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FullName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateOfBirth" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateOfBirth_StopOnFirstSourceVerified" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="UnitNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Suburb" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="State" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MobileNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DriversLicenseNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DriversLicenseVersion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VehicleRegistration" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReportingReference" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="MVRVR_NAD_Match_Last_Name" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="PassportNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PassportExpiry" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="CitizenshipCertificateNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryOfBirth" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BirthCertificateNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PlaceOfBirth" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MothersFirstNames" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MothersLastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FathersFirstNames" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FathersLastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryOfResidence" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Watchlist_MatchType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="IDCardNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankCardNo" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ShowPhoto" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="AMShowFullMatch" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="VerifyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VerifyResult" type="tns:VerifyResults_v22" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="VerifyResults_v22">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Results" type="tns:ArrayOfVerifyResult_v22" />
+          <s:element minOccurs="1" maxOccurs="1" name="SafeHarbour" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReportingReference" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResultsFileURL" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfVerifyResult_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="VerifyResult_v22" nillable="true" type="tns:VerifyResult_v22" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="VerifyResult_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="DataSource" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Status" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="url_more" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="url_more_remote" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="safe_harbour_score" type="tns:SafeHarbourScore" />
+          <s:element minOccurs="0" maxOccurs="1" name="scan_id" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Item" type="tns:ArrayOfVerifyItem_v22" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="SafeHarbourScore">
+        <s:restriction base="s:string">
+          <s:enumeration value="None" />
+          <s:enumeration value="M1" />
+          <s:enumeration value="M2" />
+          <s:enumeration value="N1" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="ArrayOfVerifyItem_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="VerifyItem_v22" nillable="true" type="tns:VerifyItem_v22" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="VerifyItem_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FullName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="FirstNameVerified" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="MiddleName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="MiddleNameVerified" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastNameVerified" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Gender" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MobileNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Addresses" type="tns:ArrayOfVerifyItemAddress_v22" />
+          <s:element minOccurs="0" maxOccurs="1" name="OtherOwners" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyRelationship" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="KnownNames" type="tns:ArrayOfString" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateofBirth" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateofBirthVerified" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="LicenseNoVerified" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="VehicleRegistrationVerified" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="VehicleMake" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VehicleModel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VehicleSubmodel" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VehicleBodyStyle" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VehicleYear" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VehicleColour" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VehicleVin" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastOdometerReading" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastOdometerReadingDate" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="VehicleOwnershipDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="PassportNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PassportExpiry" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="CitizenshipCertificateNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryOfBirth" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BirthCertificateNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PlaceOfBirth" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MothersFirstNames" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MothersLastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FathersFirstNames" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FathersLastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WatchlistCategory" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WatchListAdditionalInformation" type="tns:VerifyItemWatchlist_v22" />
+          <s:element minOccurs="0" maxOccurs="1" name="ResidentOf" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastReviewed" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeathIndex" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="IDCardNo" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IDCardNoValid" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankCardNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankCardName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhotoURL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StatusMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ErrorMessage" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SourceVerified" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="FieldVerifications" type="tns:VerifyItemFieldVerification_v22" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfVerifyItemAddress_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="VerifyItemAddress_v22" nillable="true" type="tns:VerifyItemAddress_v22" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="VerifyItemAddress_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AddressLine1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressSuburb" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressPostCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AddressFromDate" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="TitleNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Encumberance" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="EncumberanceLodged" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="GNA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DPID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AddressVerified" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="VerifyItemWatchlist_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="OriginalScriptName" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="OtherNames" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="SanctionsReferences" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="ImportantDates" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="OfficialLists" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="Associates" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="Images" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="IDNumbers" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="Notes" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="VerifyItemFieldVerification_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstInitial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MiddleName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MiddleInitial" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UnitNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="StreetType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Suburb" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DateOfBirth" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MobileNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MVRego" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DriversLicenceNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DriversLicenceVersion" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PassportNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PassportExpiry" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CountryOfBirth" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="IDNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BankCardNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NameMatchScore" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AddressMatchScore" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="VerifyHistory">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Session" type="tns:SessionManager_v22" />
+            <s:element minOccurs="0" maxOccurs="1" name="ReportingReference" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="StartDate" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="EndDate" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="VerifyHistoryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="VerifyHistoryResult" type="tns:ArrayOfVerifyHistoryItem_v22" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfVerifyHistoryItem_v22">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="VerifyHistoryItem_v22" nillable="true" type="tns:VerifyHistoryItem_v22" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="VerifyHistoryItem_v22">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="SearchDateTime" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReportingReference" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SearchCriteria" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VerifyReportURL" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetVerifyReport">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Session" type="tns:SessionManager_v22" />
+            <s:element minOccurs="0" maxOccurs="1" name="file_name" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetVerifyReportResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetVerifyReportResult" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="AuthenticateSoapIn">
+    <wsdl:part name="parameters" element="tns:Authenticate" />
+  </wsdl:message>
+  <wsdl:message name="AuthenticateSoapOut">
+    <wsdl:part name="parameters" element="tns:AuthenticateResponse" />
+  </wsdl:message>
+  <wsdl:message name="LogOutSoapIn">
+    <wsdl:part name="parameters" element="tns:LogOut" />
+  </wsdl:message>
+  <wsdl:message name="LogOutSoapOut">
+    <wsdl:part name="parameters" element="tns:LogOutResponse" />
+  </wsdl:message>
+  <wsdl:message name="VerifySoapIn">
+    <wsdl:part name="parameters" element="tns:Verify" />
+  </wsdl:message>
+  <wsdl:message name="VerifySoapOut">
+    <wsdl:part name="parameters" element="tns:VerifyResponse" />
+  </wsdl:message>
+  <wsdl:message name="VerifyHistorySoapIn">
+    <wsdl:part name="parameters" element="tns:VerifyHistory" />
+  </wsdl:message>
+  <wsdl:message name="VerifyHistorySoapOut">
+    <wsdl:part name="parameters" element="tns:VerifyHistoryResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetVerifyReportSoapIn">
+    <wsdl:part name="parameters" element="tns:GetVerifyReport" />
+  </wsdl:message>
+  <wsdl:message name="GetVerifyReportSoapOut">
+    <wsdl:part name="parameters" element="tns:GetVerifyReportResponse" />
+  </wsdl:message>
+  <wsdl:portType name="SearchService_v22Soap">
+    <wsdl:operation name="Authenticate">
+      <wsdl:input message="tns:AuthenticateSoapIn" />
+      <wsdl:output message="tns:AuthenticateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LogOut">
+      <wsdl:input message="tns:LogOutSoapIn" />
+      <wsdl:output message="tns:LogOutSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Verify">
+      <wsdl:input message="tns:VerifySoapIn" />
+      <wsdl:output message="tns:VerifySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="VerifyHistory">
+      <wsdl:input message="tns:VerifyHistorySoapIn" />
+      <wsdl:output message="tns:VerifyHistorySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetVerifyReport">
+      <wsdl:input message="tns:GetVerifyReportSoapIn" />
+      <wsdl:output message="tns:GetVerifyReportSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SearchService_v22Soap" type="tns:SearchService_v22Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Authenticate">
+      <soap:operation soapAction="http://svc.datazoo.co.nz/Authenticate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogOut">
+      <soap:operation soapAction="http://svc.datazoo.co.nz/LogOut" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Verify">
+      <soap:operation soapAction="http://svc.datazoo.co.nz/Verify" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyHistory">
+      <soap:operation soapAction="http://svc.datazoo.co.nz/VerifyHistory" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVerifyReport">
+      <soap:operation soapAction="http://svc.datazoo.co.nz/GetVerifyReport" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SearchService_v22Soap12" type="tns:SearchService_v22Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Authenticate">
+      <soap12:operation soapAction="http://svc.datazoo.co.nz/Authenticate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LogOut">
+      <soap12:operation soapAction="http://svc.datazoo.co.nz/LogOut" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Verify">
+      <soap12:operation soapAction="http://svc.datazoo.co.nz/Verify" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyHistory">
+      <soap12:operation soapAction="http://svc.datazoo.co.nz/VerifyHistory" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetVerifyReport">
+      <soap12:operation soapAction="http://svc.datazoo.co.nz/GetVerifyReport" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SearchService_v22">
+    <wsdl:port name="SearchService_v22Soap" binding="tns:SearchService_v22Soap">
+      <soap:address location="https://svctest.datazoo.co.nz/SearchService_v22.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SearchService_v22Soap12" binding="tns:SearchService_v22Soap12">
+      <soap12:address location="https://svctest.datazoo.co.nz/SearchService_v22.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

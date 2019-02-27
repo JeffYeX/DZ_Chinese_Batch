@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.ServiceModel;
+using System.Xml;
+using System.Xml.Serialization;
 using ClosedXML.Excel;
 using Excel;
+//using KMS_batch_backend.V27Production;
 using KMS_batch_backend.V27Production;
+using Newtonsoft.Json;
 
 namespace KMS_batch_backend
 {
@@ -28,7 +33,8 @@ namespace KMS_batch_backend
 
         private static void Main(string[] args)
         {
-            var filePath = Directory.GetCurrentDirectory() + "\\Input.xlsx";
+            
+            var filePath = Directory.GetCurrentDirectory() + "\\InputGB.xlsx";
             var stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
             var excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
 
@@ -37,12 +43,15 @@ namespace KMS_batch_backend
 
             var client = new SearchService_v27SoapClient();
 
-            var token = client.Authenticate("tony_dz", "Jacob#94");
-            
+            //var token = client.Authenticate("Service Test", "f2MEwR=tra");
+            var token = client.Authenticate("Service Test", "f2MEwR=tra");
+
             token.DataSources =
                 token.DataSources.Where(
-                    v27 => v27.DataSourceName == "China National ID" || v27.DataSourceName == "Watchlist AML").ToArray();
+                    //v27 => v27.DataSourceName == "Yellow Pages" || v27.DataSourceName == "NZTA Drivers License" || v27.DataSourceName == "DZ NAD").ToArray();
+                    v27 => v27.DataSourceName == "DZ NAD").ToArray();
 
+            token.DataSources[0].ConsentObtained = true;
             var recordCount = 0;
             while (excelReader.Read())
             {
@@ -52,25 +61,42 @@ namespace KMS_batch_backend
                     continue;
                 }
 
-                if (recordCount % 10 == 0)
-                {
-                    token = client.Authenticate("tony_dz", "Jacob#94");
+                token = client.Authenticate("Service Test", "f2MEwR=tra");
 
                     token.DataSources =
                         token.DataSources.Where(
-                            v27 => v27.DataSourceName == "China National ID" || v27.DataSourceName == "Watchlist AML").ToArray();
-                }
+                            //v27 => v27.DataSourceName == "Yellow Pages" || v27.DataSourceName == "NZTA Drivers License" || v27.DataSourceName == "DZ NAD").ToArray();
+                            v27 => v27.DataSourceName == "DZ NAD").ToArray();
 
+                token.DataSources[0].ConsentObtained = true;
                 input.DZID = "1";
-                input.CustomerReference = excelReader[1].ToString();
-                input.ShowPhoto = excelReader[2].Equals("FALSE");
+                //input.CustomerReference = excelReader[1].ToString();
+                /*input.ShowPhoto = excelReader[2].Equals("FALSE");
                 input.FullName = excelReader[3].ToString() + excelReader[2].ToString();
                 input.IdCardnumber = excelReader[5].ToString();
                 input.DateOfBirth = DateTime.ParseExact(excelReader[4].ToString(),
                     "d/MM/yyyy h:mm:ss tt",
+                    null);*/
+
+                
+                input.FirstName = excelReader[1].ToString() ?? "";
+                input.MiddleName = excelReader[2].ToString() ?? "";
+                input.LastName = excelReader[3].ToString() ?? "";
+                input.StreetNumber = excelReader[4].ToString() ?? "";
+                input.StreetName = excelReader[5].ToString() ?? "";
+                input.City = excelReader[6].ToString() ;
+                input.PostCode = excelReader[8].ToString() ?? "";
+                var blah = excelReader[9].ToString() ?? "";
+                input.DateOfBirth = DateTime.ParseExact(excelReader[9].ToString(),
+                    "d-M-yyyy",
                     null);
-                outputList.Add(DataProcessing(input, token));
-                Console.WriteLine("**" + recordCount + "** " + token.Token);
+                input.DLNumber = excelReader[10].ToString() ?? "";
+                input.DLVersion = excelReader[11].ToString() ?? "";
+
+                var output = DataProcessing(input, token);
+
+                outputList.Add(output);
+                Console.WriteLine("**" + recordCount + "** " + token.Token + "**" + output.SourceVerfied);
                 recordCount++;
             }
             Console.WriteLine($"In total, {recordCount} are being processed.");
@@ -89,16 +115,27 @@ namespace KMS_batch_backend
             {
                 var content = new SearchCriteria_v27
                 {
-                    FullName = input.FullName,
-                    IDCardNo = input.IdCardnumber,
-                    DateOfBirth = input.DateOfBirth,
-                    ShowPhoto = input.ShowPhoto
+                    FirstName = input.FirstName,
+                    MiddleName = input.MiddleName,
+                    LastName = input.LastName,
+                    StreetNumber = input.StreetNumber,
+                    StreetName = input.StreetName,
+                    City = input.City,
+                    PostCode = input.PostCode,
+                    DriversLicenseNo = input.DLNumber,
+                    DriversLicenseVersion = input.DLVersion,
+                    DateOfBirth = input.DateOfBirth
                 };
 
-                if (IdValidCheck(content.IDCardNo))
+                /*if (IdValidCheck(content.IDCardNo))
                 {
                 result = client.Verify(token, content);
-                }
+                }*/
+
+                result = client.Verify(token, content);
+                
+                //Console.WriteLine(json);
+
                 if (result.Message != null && result.Message.Equals("Success"))
                 {
                     output.Message = "Success";
@@ -109,34 +146,53 @@ namespace KMS_batch_backend
                         output.WatchListPdf = "None";
                         output.WatchListCategory = "None";
                         output.ScanId = "None";
-
                     }
                     else
                     {
-                        output.DZID = input.DZID;
+                        var blah = result.Results[0].Item[0];
+
+                        var json = JsonConvert.SerializeObject(blah);
+
+                        output.Message = result.Message;
+                        output.DZID = result.ReportingReference;
+                        output.CustomerReference = json;
+                        output.SourceVerfied = blah.SourceVerified;
+
+                        /*output.DZID = input.DZID;
                         output.CustomerReference = input.CustomerReference;
                         output.WatchListPdf = result.Results[0].url_more;
                         output.WatchListCategory = result.Results[0].Item[0].WatchlistCategory;
-                        output.ScanId = result.Results[0].scan_id;
+                        output.ScanId = result.Results[0].scan_id;*/
                     }
-                    if (result.Results[1].Item == null) return output;
-                    var chinaIdResult = result.Results[1].Item[0];
-                    output.DZID = input.DZID;
+
+
+                    /*if (result.Results[0].Item == null) return output;
+                    var chinaIdResult = result.Results[0].Item[0];
+                    var addressInfo = chinaIdResult.Addresses[0];
+                    output.DZID = result.ReportingReference;
                     output.CustomerReference = input.CustomerReference;
-                    output.InputFullName = content.FullName;
-                    output.InputDOB = content.DateOfBirth.ToShortDateString();
+                    //output.InputFullName = content.FullName;
+                    //output.InputDOB = content.DateOfBirth.ToShortDateString();
                     output.SourceVerfied = chinaIdResult.SourceVerified;
-                    output.IdCardNoValid = chinaIdResult.IDCardNoValid;
+                    /*output.IdCardNoValid = chinaIdResult.IDCardNoValid;
                     output.DateOfBirthVerified = chinaIdResult.DateofBirthVerified;
                     output.AddressLocality = chinaIdResult.Addresses[0].AddressLine1;
                     output.Gender = chinaIdResult.Gender;
-                    output.PhotoUrl = input.ShowPhoto ? chinaIdResult.PhotoURL : "Not requested";
-                    output.ErrorMessages = chinaIdResult.ErrorMessage;
+                    output.PhotoUrl = input.ShowPhoto ? chinaIdResult.PhotoURL : "Not requested";#1#
+                    output.AddressLine1 = addressInfo.AddressLine1;
+                    output.DPID = addressInfo.DPID;
+                    output.SafeHarbour = result.Results[0].safe_harbour_score.ToString();
+                    output.Firstname = chinaIdResult.FirstName;
+                    output.LastName = chinaIdResult.LastName;
+                    //output.ErrorMessages = chinaIdResult.ErrorMessage;*/
+
+
+
                 }
                 else
                 {
                     output.Message = "Fail";
-                    output.ErrorMessages = "ID number is not valid";
+                    //output.ErrorMessages = "ID number is not valid";
                     if (result.Results[0].Item == null)
                     {
                         output.DZID = input.DZID;
@@ -146,14 +202,14 @@ namespace KMS_batch_backend
                         output.ScanId = "None";
 
                     }
-                    else
+                    /*else
                     {
                         output.DZID = input.DZID;
                         output.CustomerReference = input.CustomerReference;
                         output.WatchListPdf = result.Results[0].url_more;
                         output.WatchListCategory = result.Results[0].Item[0].WatchlistCategory;
                         output.ScanId = result.Results[0].scan_id;
-                    }
+                    }*/
                 }
                 Console.WriteLine($"{output.Message} {content.IDCardNo} {output.ErrorMessages} ");
             }
@@ -177,7 +233,14 @@ namespace KMS_batch_backend
             worksheet.Cell($"A{rowIndicator}").Value = "Message";
             worksheet.Cell($"B{rowIndicator}").Value = "DZID";
             worksheet.Cell($"C{rowIndicator}").Value = "CustomerReference";
-            worksheet.Cell($"D{rowIndicator}").Value = "InputFullName";
+            worksheet.Cell($"D{rowIndicator}").Value = "FirstName";
+            worksheet.Cell($"E{rowIndicator}").Value = "LastName";
+            worksheet.Cell($"F{rowIndicator}").Value = "AddressLine";
+            worksheet.Cell($"G{rowIndicator}").Value = "DPID";
+            worksheet.Cell($"H{rowIndicator}").Value = "Safeharbour";
+            worksheet.Cell($"I{rowIndicator}").Value = "SourceVerified";
+
+            /*worksheet.Cell($"D{rowIndicator}").Value = "InputFullName";
             worksheet.Cell($"E{rowIndicator}").Value = "InputDOB";
             worksheet.Cell($"F{rowIndicator}").Value = "SourceVerified";
             worksheet.Cell($"G{rowIndicator}").Value = "IDCardNoValid";
@@ -188,7 +251,7 @@ namespace KMS_batch_backend
             worksheet.Cell($"L{rowIndicator}").Value = "WatchListPDF";
             worksheet.Cell($"M{rowIndicator}").Value = "WatchListCategory";
             worksheet.Cell($"N{rowIndicator}").Value = "ScanID";
-            worksheet.Cell($"O{rowIndicator}").Value = "ErrorMessages";
+            worksheet.Cell($"O{rowIndicator}").Value = "ErrorMessages";*/
         }
 
         private static void BuildingOutputBody(IXLWorksheet worksheet, IEnumerable<OutputBindingModel> output)
@@ -199,7 +262,14 @@ namespace KMS_batch_backend
                 worksheet.Cell($"A{rowIndicator}").Value = item.Message;
                 worksheet.Cell($"B{rowIndicator}").Value = item.DZID;
                 worksheet.Cell($"C{rowIndicator}").Value = item.CustomerReference;
-                worksheet.Cell($"D{rowIndicator}").Value = item.InputFullName;
+                worksheet.Cell($"D{rowIndicator}").Value = item.Firstname;
+                worksheet.Cell($"E{rowIndicator}").Value = item.LastName;
+                worksheet.Cell($"F{rowIndicator}").Value = item.AddressLine1;
+                worksheet.Cell($"G{rowIndicator}").Value = item.DPID;
+                worksheet.Cell($"H{rowIndicator}").Value = item.SafeHarbour;
+                worksheet.Cell($"I{rowIndicator}").Value = item.SourceVerfied;
+
+                /*worksheet.Cell($"D{rowIndicator}").Value = item.InputFullName;
                 worksheet.Cell($"E{rowIndicator}").Value = item.InputDOB;
                 worksheet.Cell($"F{rowIndicator}").Value = item.SourceVerfied;
                 worksheet.Cell($"G{rowIndicator}").Value = item.IdCardNoValid;
@@ -210,7 +280,7 @@ namespace KMS_batch_backend
                 worksheet.Cell($"L{rowIndicator}").Value = item.WatchListPdf;
                 worksheet.Cell($"M{rowIndicator}").Value = item.WatchListCategory;
                 worksheet.Cell($"N{rowIndicator}").Value = item.ScanId;
-                worksheet.Cell($"O{rowIndicator}").Value = item.ErrorMessages;
+                worksheet.Cell($"O{rowIndicator}").Value = item.ErrorMessages;*/
                 rowIndicator++;
             }
         }
