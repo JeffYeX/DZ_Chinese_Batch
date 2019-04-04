@@ -81,10 +81,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InputBindingModel.cs" />
+    <Compile Include="InputBindingModelLilo.cs" />
     <Compile Include="OutputBindingModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\KmsServices\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\LilosoftMain\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -139,6 +145,31 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\KmsServices\SearchService_v181.wsdl" />
+    <None Include="Service References\LilosoftMain\CardServicePort.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LilosoftMain\CardServiceService.wsdl" />
+    <None Include="Service References\LilosoftMain\KMS_batch_backend.LilosoftMain.CheckBadDetailResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LilosoftMain\KMS_batch_backend.LilosoftMain.CheckBadInfosResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LilosoftMain\KMS_batch_backend.LilosoftMain.CheckBadRecordResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LilosoftMain\KMS_batch_backend.LilosoftMain.CheckBankcardResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LilosoftMain\KMS_batch_backend.LilosoftMain.CheckCellphoneResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LilosoftMain\KMS_batch_backend.LilosoftMain.CheckIdcardResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LilosoftMain\KMS_batch_backend.LilosoftMain.QueryBalanceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\v18Prod\KMS_batch_backend.v18Prod.AuthenticateResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -289,6 +320,7 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\KmsServices\" />
+    <WCFMetadataStorage Include="Service References\LilosoftMain\" />
     <WCFMetadataStorage Include="Service References\v18Prod\" />
     <WCFMetadataStorage Include="Service References\v18Test\" />
     <WCFMetadataStorage Include="Service References\v22Prod\" />
@@ -409,6 +441,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\v27AuProd\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LilosoftMain\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LilosoftMain\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LilosoftMain\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://service.lilosoft/" targetNamespace="http://service.lilosoft/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="CheckCellphone" type="tns:CheckCellphone" />
+  <xs:element name="CheckCellphoneResponse" type="tns:CheckCellphoneResponse" />
+  <xs:element name="CheckBankcard" type="tns:CheckBankcard" />
+  <xs:element name="CheckBankcardResponse" type="tns:CheckBankcardResponse" />
+  <xs:element name="CheckIdcard" type="tns:CheckIdcard" />
+  <xs:element name="CheckIdcardResponse" type="tns:CheckIdcardResponse" />
+  <xs:element name="CheckBadRecord" type="tns:CheckBadRecord" />
+  <xs:element name="CheckBadRecordResponse" type="tns:CheckBadRecordResponse" />
+  <xs:element name="CheckBadInfos" type="tns:CheckBadInfos" />
+  <xs:element name="CheckBadInfosResponse" type="tns:CheckBadInfosResponse" />
+  <xs:element name="CheckBadDetail" type="tns:CheckBadDetail" />
+  <xs:element name="CheckBadDetailResponse" type="tns:CheckBadDetailResponse" />
+  <xs:element name="QueryBalance" type="tns:QueryBalance" />
+  <xs:element name="QueryBalanceResponse" type="tns:QueryBalanceResponse" />
+  <xs:complexType name="CheckCellphone">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckCellphoneResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckIdcard">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckIdcardResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckBankcard">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckBankcardResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckBadRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckBadRecordResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckBadInfos">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckBadInfosResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckBadDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CheckBadDetailResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="QueryBalance">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string" />
+      <xs:element minOccurs="0" name="arg1" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="QueryBalanceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

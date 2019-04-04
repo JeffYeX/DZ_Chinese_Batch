@@ -8,6 +8,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using ClosedXML.Excel;
 using Excel;
+using KMS_batch_backend.LilosoftMain;
 //using KMS_batch_backend.V27Production;
 using KMS_batch_backend.V27Production;
 using Newtonsoft.Json;
@@ -33,13 +34,19 @@ namespace KMS_batch_backend
 
         private static void Main(string[] args)
         {
-            
-            var filePath = Directory.GetCurrentDirectory() + "\\InputGB.xlsx";
+            var testID = IdValidCheck("310230196111247559");
+
+            var cardWS = new CardServiceDelegateClient();
+            const string prodAppkey = "91beea622dfe8176eaa99ab70821ef58";
+
+            var filePath = Directory.GetCurrentDirectory() + "\\InputLilo.xlsx";
             var stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
             var excelReader = ExcelReaderFactory.CreateOpenXmlReader(stream);
 
             var input = new InputBindingModel();
+            var liloInput = new InputBindingModelLilo();
             var outputList = new List<OutputBindingModel>();
+            var liloOutputList = new List<string>();
 
             var client = new SearchService_v27SoapClient();
 
@@ -79,7 +86,7 @@ namespace KMS_batch_backend
                     null);*/
 
                 
-                input.FirstName = excelReader[1].ToString() ?? "";
+                /*input.FirstName = excelReader[1].ToString() ?? "";
                 input.MiddleName = excelReader[2].ToString() ?? "";
                 input.LastName = excelReader[3].ToString() ?? "";
                 input.StreetNumber = excelReader[4].ToString() ?? "";
@@ -91,16 +98,31 @@ namespace KMS_batch_backend
                     "d-M-yyyy",
                     null);
                 input.DLNumber = excelReader[10].ToString() ?? "";
-                input.DLVersion = excelReader[11].ToString() ?? "";
+                input.DLVersion = excelReader[11].ToString() ?? "";*/
 
-                var output = DataProcessing(input, token);
+                //LiloInput
+                liloInput.name = excelReader[0].ToString() ?? "";
+                liloInput.cardno = excelReader[1].ToString() ?? "";
+                liloInput.phone = excelReader[3].ToString() ?? "";
 
-                outputList.Add(output);
-                Console.WriteLine("**" + recordCount + "** " + token.Token + "**" + output.SourceVerfied);
+                var jsonLiloInput = JsonConvert.SerializeObject(liloInput);
+
+                var liloOutput = cardWS.CheckCellphone(prodAppkey, jsonLiloInput);
+
+                //var output = DataProcessing(input, token);
+
+                //outputList.Add(output);
+
+                liloOutputList.Add(liloOutput);
+
+                //Console.WriteLine("**" + recordCount + "** " + token.Token + "**" + output.SourceVerfied);
+                Console.WriteLine("**" + recordCount + "** " + "**" + liloOutput);
+
                 recordCount++;
             }
             Console.WriteLine($"In total, {recordCount} are being processed.");
-            BuildingOutput(outputList);
+            //BuildingOutput(outputList);
+            BuildingLiloOutput(liloOutputList);
 
             excelReader.Close();
             Console.ReadLine();
@@ -284,6 +306,22 @@ namespace KMS_batch_backend
                 rowIndicator++;
             }
         }
+
+        private static void BuildingLiloOutput(IEnumerable<string> output)
+        {
+            var rowIndicator = 1;
+            var workbook = new XLWorkbook();
+            var worksheet = workbook.Worksheets.Add("Output");
+            worksheet.ColumnWidth = 20;
+            foreach (var item in output)
+            {
+                worksheet.Cell($"A{rowIndicator}").Value = item;
+                rowIndicator++;
+            }
+            var datetimenow = DateTime.Now.ToString("yyyyMMddHHmmss");
+            workbook.SaveAs($"DataZoo_Output_{datetimenow}.xlsx");
+        }
+
 
         private static bool IdValidCheck(string id)
         {

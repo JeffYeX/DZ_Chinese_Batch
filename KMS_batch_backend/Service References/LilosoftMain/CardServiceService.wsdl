@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://service.lilosoft/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CardServiceService" targetNamespace="http://service.lilosoft/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="https://www.egovpass.com.cn:443/CertificationService/CardServicePort?xsd=1" namespace="http://service.lilosoft/" />
+    </xsd:schema>
+  </types>
+  <message name="CheckCellphone">
+    <part name="parameters" element="tns:CheckCellphone" />
+  </message>
+  <message name="CheckCellphoneResponse">
+    <part name="parameters" element="tns:CheckCellphoneResponse" />
+  </message>
+  <message name="CheckBankcard">
+    <part name="parameters" element="tns:CheckBankcard" />
+  </message>
+  <message name="CheckBankcardResponse">
+    <part name="parameters" element="tns:CheckBankcardResponse" />
+  </message>
+  <message name="CheckIdcard">
+    <part name="parameters" element="tns:CheckIdcard" />
+  </message>
+  <message name="CheckIdcardResponse">
+    <part name="parameters" element="tns:CheckIdcardResponse" />
+  </message>
+  <message name="CheckBadRecord">
+    <part name="parameters" element="tns:CheckBadRecord" />
+  </message>
+  <message name="CheckBadRecordResponse">
+    <part name="parameters" element="tns:CheckBadRecordResponse" />
+  </message>
+  <message name="CheckBadInfos">
+    <part name="parameters" element="tns:CheckBadInfos" />
+  </message>
+  <message name="CheckBadInfosResponse">
+    <part name="parameters" element="tns:CheckBadInfosResponse" />
+  </message>
+  <message name="CheckBadDetail">
+    <part name="parameters" element="tns:CheckBadDetail" />
+  </message>
+  <message name="CheckBadDetailResponse">
+    <part name="parameters" element="tns:CheckBadDetailResponse" />
+  </message>
+  <message name="QueryBalance">
+    <part name="parameters" element="tns:QueryBalance" />
+  </message>
+  <message name="QueryBalanceResponse">
+    <part name="parameters" element="tns:QueryBalanceResponse" />
+  </message>
+  <portType name="CardServiceDelegate">
+    <operation name="CheckCellphone">
+      <input message="tns:CheckCellphone" />
+      <output message="tns:CheckCellphoneResponse" />
+    </operation>
+    <operation name="CheckBankcard">
+      <input message="tns:CheckBankcard" />
+      <output message="tns:CheckBankcardResponse" />
+    </operation>
+    <operation name="CheckIdcard">
+      <input message="tns:CheckIdcard" />
+      <output message="tns:CheckIdcardResponse" />
+    </operation>
+    <operation name="CheckBadRecord">
+      <input message="tns:CheckBadRecord" />
+      <output message="tns:CheckBadRecordResponse" />
+    </operation>
+    <operation name="CheckBadInfos">
+      <input message="tns:CheckBadInfos" />
+      <output message="tns:CheckBadInfosResponse" />
+    </operation>
+    <operation name="CheckBadDetail">
+      <input message="tns:CheckBadDetail" />
+      <output message="tns:CheckBadDetailResponse" />
+    </operation>
+    <operation name="QueryBalance">
+      <input message="tns:QueryBalance" />
+      <output message="tns:QueryBalanceResponse" />
+    </operation>
+  </portType>
+  <binding name="CardServicePortBinding" type="tns:CardServiceDelegate">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="CheckCellphone">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="CheckBankcard">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="CheckIdcard">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="CheckBadRecord">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="CheckBadInfos">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="CheckBadDetail">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="QueryBalance">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="CardServiceService">
+    <port name="CardServicePort" binding="tns:CardServicePortBinding">
+      <soap:address location="https://www.egovpass.com.cn:443/CertificationService/CardServicePort" />
+    </port>
+  </service>
+</definitions>
